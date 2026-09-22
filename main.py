@@ -58,6 +58,13 @@ quote_keyboard = InlineKeyboardMarkup(
     inline_keyboard = [[quote_button]]
 )
 
+def format_quote(quote):
+    return (
+        f"🌅 Цитата дня\n\n"
+        f"«{quote}»\n\n"
+        f"🚀 Хорошего дня!"
+    )
+
 @dp.message(CommandStart())
 async def start_handler(message: Message):
     await message.answer("Привет! Я твой личный Telegram-бот 🚀")
@@ -65,22 +72,20 @@ async def start_handler(message: Message):
 @dp.message(Command("quote"))
 async def quote_handler(message: Message):
     quote = random.choice(quotes)
+    text = format_quote(quote)
     await message.answer(
-    f"🌅 Цитата дня\n\n"
-    f"«{quote}»\n\n"
-    f"🚀 Хорошего дня!",
-    reply_markup = quote_keyboard
+        text,
+        reply_markup = quote_keyboard
 )
 
 @dp.callback_query()
 async def new_quote_handler(callback: CallbackQuery):
     quote = random.choice(quotes)
+    text = format_quote(quote)
     await callback.answer()
     await callback.message.edit_text(
-    f"🌅 Цитата дня\n\n"
-    f"«{quote}»\n\n"
-    f"🚀 Хорошего дня!",
-    reply_markup = quote_keyboard
+        text,
+        reply_markup = quote_keyboard
     )
 
 async def main():
