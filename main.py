@@ -1,12 +1,12 @@
 import asyncio
 import os
-import random
 
 from aiogram import Bot, Dispatcher
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 from quotes import quotes
+from quotes import get_random_quote
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -36,7 +36,7 @@ async def start_handler(message: Message):
 
 @dp.message(Command("quote"))
 async def quote_handler(message: Message):
-    quote = random.choice(quotes)
+    quote = get_random_quote()
     text = format_quote(quote)
     await message.answer(
         text,
@@ -45,7 +45,7 @@ async def quote_handler(message: Message):
 
 @dp.callback_query()
 async def new_quote_handler(callback: CallbackQuery):
-    quote = random.choice(quotes)
+    quote = get_random_quote()
     text = format_quote(quote)
     await callback.answer()
     await callback.message.edit_text(
