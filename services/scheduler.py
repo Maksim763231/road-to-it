@@ -1,13 +1,14 @@
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from quotes import get_random_quote
 from handlers.motivation import format_quote
-
-chat_id = 1784197771
+from repositories.user_repository import get_all_users
 
 async def test_job(bot):
     quote = get_random_quote()
     formatted_quote = format_quote(quote)
-    await bot.send_message(chat_id=chat_id, text=formatted_quote)
+    users = get_all_users()
+    for user in users:
+        await bot.send_message(chat_id=user.chat_id, text=formatted_quote)
 
 
 scheduler = AsyncIOScheduler()
