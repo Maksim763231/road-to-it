@@ -21,6 +21,22 @@ def create_tables():
             timezone TEXT
         )
     """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS habits (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            active INTEGER NOT NULL DEFAULT 1
+        )
+    """)    
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS habit_completions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            habit_id INTEGER NOT NULL,
+            completed_date TEXT NOT NULL,
+            UNIQUE(habit_id, completed_date)
+        )
+    """)
 
     con.commit()
     con.close()

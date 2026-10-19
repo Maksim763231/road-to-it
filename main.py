@@ -9,6 +9,7 @@ from handlers.motivation import router as motivation_router
 from handlers.start import router as start_router
 from services.scheduler import start_scheduler
 from handlers.settings import router as settings_router
+from handlers.habits import router as habits_router
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -18,12 +19,13 @@ dp = Dispatcher()
 dp.include_router(motivation_router)
 dp.include_router(start_router)
 dp.include_router(settings_router)
+dp.include_router(habits_router)
 
 async def main():
     create_tables()
     start_scheduler(bot)
     await dp.start_polling(bot)
-    
+
 async def main():
     start_scheduler(bot)
     await dp.start_polling(bot)
