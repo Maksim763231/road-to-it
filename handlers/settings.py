@@ -9,7 +9,7 @@ from aiogram.types import (
     InlineKeyboardMarkup,
     Message,
 )
-
+from services.scheduler import schedule_user
 from repositories.user_repository import get_user, save_user
 
 router = Router()
@@ -81,6 +81,7 @@ async def toggle_motivation_handler(callback: CallbackQuery):
 
     user.enabled = not user.enabled
     save_user(user)
+    schedule_user(callback.bot, user)
 
     await callback.message.edit_text(
         format_settings(user),
@@ -127,6 +128,7 @@ async def set_time_handler(
 
     user.time = value
     save_user(user)
+    schedule_user(message.bot, user)
 
     await message.answer(f"⏰ Новое время: {user.time}")
 
@@ -161,6 +163,7 @@ async def set_timezone_handler(
 
     user.timezone = timezone_name
     save_user(user)
+    schedule_user(message.bot, user)
 
     await message.answer(
         f"🌍 Новый часовой пояс: {user.timezone}"

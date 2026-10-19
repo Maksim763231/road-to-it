@@ -4,6 +4,7 @@ from aiogram.types import Message
 
 from models.user import User
 from repositories.user_repository import save_user, get_user
+from services.scheduler import schedule_user
 
 router = Router()
 
@@ -19,5 +20,6 @@ async def start_handler(message: Message):
             timezone="Europe/Moscow"
         )
         save_user(user)
+        schedule_user(message.bot, user)
 
     await message.answer("Привет! Я твой личный Telegram-бот 🚀")
