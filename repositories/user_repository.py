@@ -53,25 +53,22 @@ def get_user(chat_id: int) -> User | None:
 
 def get_all_users() -> list[User]:
     con = get_db_connection()
-    cur = con.cursor()
-
-    cur.execute("""
-        SELECT chat_id, username, time, enabled, timezone
-        FROM users
-    """)
-
-    rows = cur.fetchall()
-
-    con.close()
-
-    return [
-        User(
-            chat_id=row[0],
-            username=row[1],
-            time=row[2],
-            enabled=bool(row[3]),
-            timezone=row[4]
-        )
-        for row in rows
-    ]
-get_all_users()
+    try:
+        cur = con.cursor()
+        cur.execute("""
+            SELECT chat_id, username, time, enabled, timezone
+            FROM users
+        """)
+        rows = cur.fetchall()
+        return [
+            User(
+                chat_id=row[0],
+                username=row[1],
+                time=row[2],
+                enabled=bool(row[3]),
+                timezone=row[4]
+            )
+            for row in rows
+        ]
+    finally:
+        con.close()
